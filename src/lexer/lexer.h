@@ -8,6 +8,7 @@ typedef enum TokenType {
     TOKEN_STRING,
     TOKEN_OPERATOR,
     TOKEN_KEYWORD,
+    TOKEN_PUNCTUATION,
     TOKEN_NULL,
     TOKEN_INVALID,
 } TokenType;

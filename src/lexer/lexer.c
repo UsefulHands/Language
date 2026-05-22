@@ -5,6 +5,8 @@
 typedef enum Keyword {
     KEYWORD_FOR,
     KEYWORD_WHILE,
+    KEYWORD_IF,
+    KEYWORD_RETURN,
 } Keyword;
 
 typedef struct KeywordMap {
@@ -14,7 +16,9 @@ typedef struct KeywordMap {
 
 KeywordMap keywordMap[] = {
     {"for", KEYWORD_FOR},
-    {"while", KEYWORD_WHILE}
+    {"while", KEYWORD_WHILE},
+    {"if", KEYWORD_IF},
+    {"return", KEYWORD_RETURN}
 };
 
 int keywordMapSize = sizeof(keywordMap) / sizeof(keywordMap[0]);
@@ -22,6 +26,15 @@ int keywordMapSize = sizeof(keywordMap) / sizeof(keywordMap[0]);
 typedef enum Operator {
     OPERATOR_PLUS,
     OPERATOR_MINUS,
+    OPERATOR_MULTI,
+    OPERATOR_DIVIDE,
+    OPERATOR_GREATER_T,
+    OPERATOR_LESSER_T,
+    OPERATOR_ASSIGN,
+    OPERATOR_EQUALS,
+    OPERATOR_NOT_EQU,
+    OPERATOR_EQU_GREATER_T,
+    OPERATOR_EQU_LESSER_T
 } Operator;
 
 typedef struct OperatorMap {
@@ -31,10 +44,48 @@ typedef struct OperatorMap {
 
 OperatorMap operatorMap[] = {
     {"+", OPERATOR_PLUS},
-    {"-", OPERATOR_MINUS}
+    {"-", OPERATOR_MINUS},
+    {"*", OPERATOR_MULTI},
+    {"/", OPERATOR_DIVIDE},
+    {">", OPERATOR_GREATER_T},
+    {"<", OPERATOR_LESSER_T},
+    {"=", OPERATOR_ASSIGN},
+    {"==", OPERATOR_EQUALS},
+    {"!=", OPERATOR_NOT_EQU},
+    {">=", OPERATOR_EQU_GREATER_T},
+    {"<=", OPERATOR_EQU_LESSER_T},
 };
 
 int operatorMapSize = sizeof(operatorMap) / sizeof(operatorMap[0]);
+
+typedef enum Punctuation {
+    PUNCTUATION_BRACES_OPEN,
+    PUNCTUATION_BRACES_CLOSED,
+    PUNCTUATION_PARENTH_OPEN,
+    PUNCTUATION_PARENTH_CLOSED,
+    PUNCTUATION_SQUARE_B_OPEN,
+    PUNCTUATION_SUQARE_B_CLOSED,
+    PUNCTUATION_SEMICOLON,
+    PUNCTUATION_COMMA,
+} Punctuation;
+
+typedef struct PunctuationMap {
+    char* word;
+    Punctuation punctuation;
+} PunctuationMap;
+
+PunctuationMap punctuationMap[] = {
+    {"{", PUNCTUATION_BRACES_OPEN},
+    {"}", PUNCTUATION_BRACES_CLOSED},
+    {"(", PUNCTUATION_PARENTH_OPEN},
+    {")", PUNCTUATION_PARENTH_CLOSED},
+    {"[", PUNCTUATION_SQUARE_B_OPEN},
+    {"]", PUNCTUATION_SUQARE_B_CLOSED},
+    {";", PUNCTUATION_SEMICOLON},
+    {",", PUNCTUATION_COMMA},
+};
+
+int punctuationMapSize = sizeof(punctuationMap) / sizeof(punctuationMap[0]);
 
 int getTokenCount(char* sentence) {
     if(sentence == NULL) return 0;
@@ -89,6 +140,9 @@ TokenType getTokenType(char* token) {
     if(isValidIdentifier(token) != 0) return TOKEN_IDENTIFIER;
     for(int i = 0; i < operatorMapSize; i++) {
         if(strcmp(operatorMap[i].word, token) == 0) return TOKEN_OPERATOR;
+    }
+    for(int i = 0; i < punctuationMapSize; i++) {
+        if(strcmp(punctuationMap[i].word, token) == 0) return TOKEN_PUNCTUATION;
     }    
     return TOKEN_INVALID;
 }
@@ -102,25 +156,56 @@ Token* getTokens(char* sentence, int* tokenCount) {
     Token* tokens = malloc(sizeof(Token) * capacity);
     int i = 0;
     while(sentence[i] != '\0') {
-        while(sentence[i] == ' ') {
-            i++;
-        }
-        if(sentence[i] == '\0'){
-            break;
-        }
+        while(sentence[i] == ' ') i++;
+        if(sentence[i] == '\0') break;
         if(sentence[i] != ' ' && sentence[i] != '\0') {
             int currentTokenLen = 0;
             int currentTokenStartIndex = i;
-            while(sentence[i] != ' ' && sentence[i] != '\0') {
-                currentTokenLen++;
+            int isOperator = 0;
+            int isPunctuation = 0;
+            if(
+                ((sentence[i] == '+' || sentence[i] == '-') && (sentence[i + 1] < '0' || sentence[i + 1] > '9'))
+                || sentence[i] == '*'
+                || sentence[i] == '/'
+                || sentence[i] == '='
+                || sentence[i] == '!'
+                || sentence[i] == '>'
+                || sentence[i] == '<'
+            ) {
+                currentTokenLen = 1;
+                isOperator = 1;
                 i++;
+                if(sentence[i] == '=') {
+                    currentTokenLen = 2;
+                    i++;
+                }
+            }
+            if(
+                sentence[i] == '{' 
+                || sentence[i] == '}' 
+                || sentence[i] == '(' 
+                || sentence[i] == ')' 
+                || sentence[i] == '[' 
+                || sentence[i] == ']'  
+                || sentence[i] == ';'
+                || sentence[i] == ','
+            ) {
+                currentTokenLen = 1;
+                isPunctuation = 1;
+                i++;
+            }
+            if(isOperator == 0 && isPunctuation == 0) {
+                while(sentence[i] != ' ' && sentence[i] != '\0') {
+                    currentTokenLen++;
+                    i++;
+                }
             }
             char* token = malloc(sizeof(char) * (currentTokenLen + 1));
             for(int j = 0; j < currentTokenLen; j++) {
                 token[j] = sentence[currentTokenStartIndex + j];
             }
             token[currentTokenLen] = '\0';
-            if(*tokenCount + 1 > capacity) {
+            if(*tokenCount >= capacity) {
                 capacity *= 2;
                 tokens = realloc(tokens, sizeof(Token) * capacity);
             }
@@ -129,5 +214,6 @@ Token* getTokens(char* sentence, int* tokenCount) {
             (*tokenCount)++;
         }
     }
+    tokens = realloc(tokens, sizeof(Token) * (*tokenCount + 1));
     return tokens;
 }
