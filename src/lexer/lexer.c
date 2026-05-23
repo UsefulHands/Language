@@ -87,25 +87,6 @@ PunctuationMap punctuationMap[] = {
 
 int punctuationMapSize = sizeof(punctuationMap) / sizeof(punctuationMap[0]);
 
-int getTokenCount(char* sentence) {
-    if(sentence == NULL) return 0;
-    int result = 0;
-    int i = 0;
-    while(sentence[i] != '\0'){
-        while(sentence[i] == ' ') {
-            i++;
-        }
-        if(sentence[i] == '\0'){
-            break;
-        }
-        while(sentence[i] != ' ' && sentence[i] != '\0') {
-            i++;
-        }
-        result++;
-    }
-    return result;
-}
-
 int isValidIdentifier(char* token) {
     if(token == NULL) return 0;
     int len = strlen(token);
@@ -128,23 +109,52 @@ int isValidNumber(char* token){
     return 1;
 }
 
-TokenType getTokenType(char* token) {
-    if(token == NULL) return TOKEN_NULL;
-    int len = strlen(token);
-    if(len == 0) return TOKEN_EOF;
-    if(len >= 2 && token[0] == '"' && token[len - 1] == '"') return TOKEN_STRING;
-    if(isValidNumber(token) != 0) return TOKEN_NUMBER;
-    for(int i = 0; i < keywordMapSize; i++) {
-        if(strcmp(keywordMap[i].word, token) == 0) return TOKEN_KEYWORD;
+TokenCategory getTokenCategory(char* token) {
+    TokenCategory category;
+    category.type = TOKEN_INVALID;
+    category.subType = -1;
+    if(token == NULL) {
+        category.type = TOKEN_NULL;
+        return category;
     }
-    if(isValidIdentifier(token) != 0) return TOKEN_IDENTIFIER;
+    int len = strlen(token);
+    if(len == 0) {
+        category.type = TOKEN_EOF;
+        return category;
+    }
+    if(len >= 2 && token[0] == '"' && token[len - 1] == '"') {
+        category.type = TOKEN_STRING;
+        return category;
+    } else if(isValidNumber(token) != 0) {
+        category.type = TOKEN_NUMBER;
+        return category;
+    }
+    for(int i = 0; i < keywordMapSize; i++) {
+        if(strcmp(keywordMap[i].word, token) == 0) {
+            category.type = TOKEN_KEYWORD;
+            category.subType = keywordMap[i].keyword;
+            return category;
+        }
+    }
+    if(isValidIdentifier(token) != 0) {
+        category.type = TOKEN_IDENTIFIER;
+        return category;
+    }
     for(int i = 0; i < operatorMapSize; i++) {
-        if(strcmp(operatorMap[i].word, token) == 0) return TOKEN_OPERATOR;
+        if(strcmp(operatorMap[i].word, token) == 0) {
+            category.type = TOKEN_OPERATOR;
+            category.subType = operatorMap[i].operator;
+            return category;
+        }
     }
     for(int i = 0; i < punctuationMapSize; i++) {
-        if(strcmp(punctuationMap[i].word, token) == 0) return TOKEN_PUNCTUATION;
-    }    
-    return TOKEN_INVALID;
+        if(strcmp(punctuationMap[i].word, token) == 0) {
+            category.type = TOKEN_PUNCTUATION;
+            category.subType = punctuationMap[i].punctuation;
+            return category;
+        }
+    } 
+    return category;
 }
 
 // int tokenCount = 0;
@@ -209,7 +219,8 @@ Token* getTokens(char* sentence, int* tokenCount) {
                 capacity *= 2;
                 tokens = realloc(tokens, sizeof(Token) * capacity);
             }
-            tokens[*tokenCount].type = getTokenType(token);
+            TokenCategory category = getTokenCategory(token);
+            tokens[*tokenCount].category = category;
             tokens[*tokenCount].value = token;
             (*tokenCount)++;
         }

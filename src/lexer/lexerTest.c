@@ -54,7 +54,7 @@ void testTokenization() {
         tokenCounts[i] = 0;
         Token* tokens = getTokens(sentences[i], &tokenCounts[i]);
         for(int j = 0; j < tokenCounts[i]; j++) {
-            printf("[%s, %s] ", tokens[j].type == expected[i][j]?"[TRUE]  ":"[FALSE] ", tokens[j].value);
+            printf("[%s, %s] ", tokens[j].category.type == expected[i][j]?"[TRUE]  ":"[FALSE] ", tokens[j].value);
         }
         printf("\n");
     }

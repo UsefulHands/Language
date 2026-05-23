@@ -3,3 +3,4 @@ Like sweet old days :D
 
 First day: I wrote a simple lexer. I will add more and more keywords in the close future.
 Second day: I added punctuation marks, more keywords, operators, and solve the confict between operator(+, -) with the number (+, -). For example x -+5 is still valid.
+Third day: I added subtype format for tokens so it will be easy to get the form of the token in the future.
