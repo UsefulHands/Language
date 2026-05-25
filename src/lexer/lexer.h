@@ -13,6 +13,8 @@ typedef enum TokenType {
     TOKEN_INVALID,
 } TokenType;
 
+extern char* tokenTypeAsString[];
+
 typedef struct TokenCategory {
     int type;
     int subType;

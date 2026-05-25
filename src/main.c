@@ -1,4 +1,4 @@
-#include "globalTest.h"
+#include "globalTest/globalTest.h"
 #include <stdio.h>
 
 int main() {

@@ -2,6 +2,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+char* tokenTypeAsString[] = {
+    "TOKEN_EOF",
+    "TOKEN_IDENTIFIER",
+    "TOKEN_NUMBER",
+    "TOKEN_STRING",
+    "TOKEN_OPERATOR",
+    "TOKEN_KEYWORD",
+    "TOKEN_PUNCTUATION",
+    "TOKEN_NULL",
+    "TOKEN_INVALID",
+};
+
 typedef enum Keyword {
     KEYWORD_FOR,
     KEYWORD_WHILE,
