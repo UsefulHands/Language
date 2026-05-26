@@ -1,4 +1,4 @@
-#include "lexerTest.h"
+#include "lexerGetTokensTest.h"
 #include "lexer.h"
 
 #include <stdio.h>

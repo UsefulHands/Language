@@ -1,8 +1,11 @@
 #include "globalTest.h"
-#include "../lexer/lexerTest.h"
-#include "../fileReader/fileReaderTest.h"
+#include "../lexer/lexerGetTokensTest.h"
+#include "../lexer/lexerLoadTokensTest.h"
+#include "../sourceBuffer/sourceBufferTest.h"
+
 
 void testAll() {
-    testTokenization();
-    testFileReading();
+    //testTokenization();
+    testTokenLoading();
+    //testFileReading();
 }

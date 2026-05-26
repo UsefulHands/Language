@@ -1,10 +1,10 @@
-#include "fileReaderTest.h"
-#include "fileReader.h"
+#include "sourceBufferTest.h"
+#include "sourceBuffer.h"
 #include <stdio.h>
 
 void testFileReading() {
-    char* fileLoc = "src/documents/fileReaderTest.txt";
-    char* charBuffer = readFile(fileLoc);
+    char* fileLoc = "src/documents/sourceBufferTest.txt";
+    char* charBuffer = readSource(fileLoc);
     if(charBuffer == NULL) return;
     printf("\nBuffer goes like: \n[ ");
     int i = 0;
