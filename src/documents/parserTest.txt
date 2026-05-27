@@ -1,0 +1,2 @@
+NUMBER a = 5;
+BOOL c5 = false;

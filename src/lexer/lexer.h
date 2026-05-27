@@ -25,6 +25,8 @@ typedef enum Keyword {
     KEYWORD_NOT,
     KEYWORD_METHOD,
     KEYWORD_NUMBER,
+    KEYWORD_STRING,
+    KEYWORD_BOOL,
     KEYWORD_BREAK,
 } Keyword;
 
@@ -57,7 +59,7 @@ typedef enum Punctuation {
 extern char* tokenTypeAsString[];
 
 typedef struct TokenCategory {
-    int type;
+    TokenType type;
     int subType;
 } TokenCategory;
 

@@ -27,7 +27,7 @@ Buffer goes like:
 
 *Fifth day: I rename the fileReaders with the sourceBuffers because fileReader could mean some bigger context. I constructed the bridge inbetween lexer and sourceBuffer.
 So SourceBuffer provides reading for txt file and lexer handles it. I also added more keywords and got rid of some keywords like "for".
-I want to keep it simple "while" works for now.
+I want to keep it simple "while" works for now. Found a little bug causes tokenization problem such as "method\n" instead of "method" etc.
 
 Current progress so far:
 TOKEN_KEYWORD if
@@ -40,3 +40,5 @@ TOKEN_KEYWORD while
 TOKEN_IDENTIFIER for
 TOKEN_OPERATOR *
 TOKEN_OPERATOR /
+
+*Sixth day: I created blueprint of my grammar. Added some unforgotten token types. Created Parser, implemented one of the deepest methods of the grammar for test. I think, next couple of comments will be only grammar functions.

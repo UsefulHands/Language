@@ -32,6 +32,8 @@ KeywordMap keywordMap[] = {
     {"not", KEYWORD_NOT},
     {"method", KEYWORD_METHOD},
     {"number", KEYWORD_NUMBER},
+    {"string", KEYWORD_STRING},
+    {"bool", KEYWORD_BOOL},
     {"break", KEYWORD_BREAK},
 };
 
