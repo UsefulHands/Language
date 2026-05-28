@@ -42,3 +42,5 @@ TOKEN_OPERATOR *
 TOKEN_OPERATOR /
 
 *Sixth day: I created blueprint of my grammar. Added some unforgotten token types. Created Parser, implemented one of the deepest methods of the grammar for test. I think, next couple of comments will be only grammar functions.
+
+*Seventh day: I added some rules to parser such as retreat, advance, restore etc. And I implemented half of the grammar implementations. I will implement the rest most probably the next commit.

@@ -8,6 +8,6 @@
 void testAll() {
     //testTokenization();
     //testTokenLoading();
-    //testFileReading();
+    //testSourceRead();
     testParser();
 }

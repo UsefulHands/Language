@@ -2,7 +2,7 @@
 #include "sourceBuffer.h"
 #include <stdio.h>
 
-void testFileReading() {
+void testSourceRead() {
     char* fileLoc = "src/documents/sourceBufferTest.txt";
     char* charBuffer = readSource(fileLoc);
     if(charBuffer == NULL) return;

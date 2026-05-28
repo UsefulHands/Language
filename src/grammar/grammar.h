@@ -27,23 +27,25 @@
 // break statement, dot, square braces open closed are didn't used in the grammar since I want to deal with the runtime later.
 // I will implement from most known to least known. So I can commit part by part.
 
-int paramList(Parser* parser);
-//int methodSTMT(Parser* parser);
-//int blockSTMT(Parser* parser);
-//int returnSTMT(Parser* parser);
-//int ifSTMT(Parser* parser);
-//int whileSTMT(Parser* parser);
-//int declaration(Parser* parser);
-//int stmt(Parser* parser);
-//int expr(Parser* parser);
-//int assignment(Parser* parser);
-//int logicOr(Parser* parser);
-//int logicAnd(Parser* parser);
-//int equality(Parser* parser);
-//int comparison(Parser* parser);
-//int term(Parser* parser);
-//int factor(Parser* parser);
+int program(Parser* parser);
+int stmt(Parser* parser);
+int declaration(Parser* parser);
+int typeSpec(Parser* parser);
+int expr(Parser* parser);
+int assignment(Parser* parser);
+int logicOr(Parser* parser);
+int logicAnd(Parser* parser);
+int equality(Parser* parser);
+int comparison(Parser* parser);
+int term(Parser* parser);
+int factor(Parser* parser);
 //int unary(Parser* parser);
 //int primary(Parser* parser);
+//int whileSTMT(Parser* parser);
+//int ifSTMT(Parser* parser);
+//int returnSTMT(Parser* parser);
+//int blockSTMT(Parser* parser);
+//int methodSTMT(Parser* parser);
+int paramList(Parser* parser);
 
 #endif

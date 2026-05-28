@@ -10,4 +10,10 @@ typedef struct Parser {
 
 void startParser(Token* tokens);
 
+int getCurrIndex(Parser* parser);
+void restore(Parser* parser, int saved);
+Token advance(Parser* parser);
+Token retreat(Parser* parser);
+Token curr(Parser* parser);
+
 #endif
