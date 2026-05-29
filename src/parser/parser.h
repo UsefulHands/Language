@@ -8,7 +8,7 @@ typedef struct Parser {
     int index;
 } Parser;
 
-void startParser(Token* tokens);
+void startParser(char* charBuffer, Token* tokens);
 
 int getCurrIndex(Parser* parser);
 void restore(Parser* parser, int saved);

@@ -1,2 +1,22 @@
-NUMBER a = 5;
-BOOL c5 = false;
+number a = 5;
+bool c5 = false;
+string s = "hello";
+number x = 1 + 2 * 3;
+number y = (4 + 5) / 3;
+bool b = true or false;
+bool b2 = true and false;
+bool b3 = not true;
+a = 10;
+a = b = 5;
+number r = a == b;
+number r2 = a != b;
+number r3 = a > b;
+number r4 = a < b;
+number r5 = a >= b;
+number r6 = a <= b;
+while (a > 0) { number x = 1; }
+if (a == true) { a = 5; }
+return 5;
+break;
+{ number x = 1; number y = 2; }
+method foo(a, b) { return a; }

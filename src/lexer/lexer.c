@@ -197,7 +197,13 @@ Token* getTokens(char* sentence, int* tokenCount) {
                 i++;
             }
             if(isOperator == 0 && isPunctuation == 0) {
-                while(sentence[i] != ' ' && sentence[i] != '\0' && sentence[i] != '\n' && sentence[i] != '\r') {
+                while(
+                        sentence[i] != ' ' && sentence[i] != '\0' && sentence[i] != '\n' && sentence[i] != '\r'
+                        && sentence[i] != ';' && sentence[i] != ',' && sentence[i] != '(' && sentence[i] != ')'
+                        && sentence[i] != '{' && sentence[i] != '}' && sentence[i] != '[' && sentence[i] != ']'
+                        && sentence[i] != '.' && sentence[i] != '=' && sentence[i] != '!' && sentence[i] != '>'
+                        && sentence[i] != '<' && sentence[i] != '*' && sentence[i] != '/'
+                    ) {
                     currentTokenLen++;
                     i++;
                 }
@@ -218,6 +224,10 @@ Token* getTokens(char* sentence, int* tokenCount) {
         }
     }
     tokens = realloc(tokens, sizeof(Token) * (*tokenCount + 1));
+    tokens[*tokenCount].category.type = TOKEN_EOF;
+    tokens[*tokenCount].category.subType = -1;
+    tokens[*tokenCount].value = "";
+    (*tokenCount)++;
     return tokens;
 }
 

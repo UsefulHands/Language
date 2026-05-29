@@ -1,11 +1,14 @@
 #include "parser.h"
+#include "../grammar/grammar.h"
+#include <stdio.h>
 
-void startParser(Token* tokens) {
+void startParser(char* charBuffer, Token* tokens) {
     Parser parser;
     parser.tokens = tokens;
     parser.index = 0;
-    //program will be the main function of the grammar.
-    //program(&parser);
+    int success = program(&parser);
+    printf("\nCharBuffer:\n\n%s\n", charBuffer);
+    printf("\nParser success: %d", success);
 }
 
 int getCurrIndex(Parser* parser) {

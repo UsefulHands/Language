@@ -7,5 +7,5 @@ void testParser() {
     char* charBuffer = readSource(fileLoc);
     int tokenCount = 0;
     Token* tokens = loadTokensFromBuffer(charBuffer, &tokenCount);
-    startParser(tokens); 
+    startParser(charBuffer, tokens); 
 }

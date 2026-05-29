@@ -41,6 +41,36 @@ TOKEN_IDENTIFIER for
 TOKEN_OPERATOR *
 TOKEN_OPERATOR /
 
-*Sixth day: I created blueprint of my grammar. Added some unforgotten token types. Created Parser, implemented one of the deepest methods of the grammar for test. I think, next couple of comments will be only grammar functions.
+*Sixth day: I created blueprint of my grammar. Added some unforgotten token types. Created Parser, implemented one of the deepest methods of the grammar for test. I think, next couple of commits will be only grammar functions.
 
 *Seventh day: I added some rules to parser such as retreat, advance, restore etc. And I implemented half of the grammar implementations. I will implement the rest most probably the next commit.
+
+*Day 8: I completed implementing the grammar. I fixed a problem that caused tokens to not end with EOF. I tested the parser results after a lengthy implementation process. Now I have a parser works that works perfectly.
+Results are like this:
+
+CharBuffer:
+
+number a = 5;
+bool c5 = false;
+string s = "hello";
+number x = 1 + 2 * 3;
+number y = (4 + 5) / 3;
+bool b = true or false;
+bool b2 = true and false;
+bool b3 = not true;
+a = 10;
+a = b = 5;
+number r = a == b;
+number r2 = a != b;
+number r3 = a > b;
+number r4 = a < b;
+number r5 = a >= b;
+number r6 = a <= b;
+while (a > 0) { number x = 1; }
+if (a == true) { a = 5; }
+return 5;
+break;
+{ number x = 1; number y = 2; }
+method foo(a, b) { return a; }
+
+Success: 1
