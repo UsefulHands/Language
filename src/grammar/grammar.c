@@ -2,7 +2,7 @@
 #include "../lexer/lexer.h"
 
 int program(Parser* parser) {
-    while (stmt(parser));
+    while(stmt(parser));
     if(curr(parser).category.type == TOKEN_EOF) {
         advance(parser);
         return 1;
@@ -38,7 +38,7 @@ int stmt(Parser* parser) {
 }
 
 int declaration(Parser* parser) {
-    if(typeSpec(parser) != 1) return 0;
+    if(typeSpec(parser) == 0) return 0;
     if(curr(parser).category.type != TOKEN_IDENTIFIER) return 0;
     advance(parser);
     if(
@@ -46,7 +46,7 @@ int declaration(Parser* parser) {
         || curr(parser).category.subType != OPERATOR_ASSIGN
     ) return 0;
     advance(parser);
-    if(expr(parser) != 1) return 0;
+    if(expr(parser) == 0) return 0;
     if(
         curr(parser).category.type != TOKEN_PUNCTUATION
         || curr(parser).category.subType != PUNCTUATION_SEMICOLON
@@ -73,9 +73,43 @@ int expr(Parser* parser) {
 
 int assignment(Parser* parser) {
     int saved = getCurrIndex(parser);
-    if (curr(parser).category.type == TOKEN_IDENTIFIER) {
+    if(curr(parser).category.type == TOKEN_IDENTIFIER) {
         advance(parser);
-        if (
+        while(1) {
+            if(
+                curr(parser).category.type == TOKEN_PUNCTUATION
+                && curr(parser).category.subType == PUNCTUATION_DOT
+            ) {
+                advance(parser);
+                if(curr(parser).category.type == TOKEN_IDENTIFIER) {
+                    advance(parser);
+                } 
+                else {
+                    restore(parser, saved);
+                    return 0;
+                }
+            }
+            else break;
+        }
+        if(
+            curr(parser).category.type == TOKEN_PUNCTUATION
+            && curr(parser).category.subType == PUNCTUATION_SQUARE_B_OPEN
+        ) {
+            advance(parser);
+            if(expr(parser) == 0) {
+                restore(parser, saved);
+                return logicOr(parser);
+            }
+            if(
+                curr(parser).category.type != TOKEN_PUNCTUATION
+                || curr(parser).category.subType != PUNCTUATION_SQUARE_B_CLOSED
+            ) {
+                restore(parser, saved);
+                return logicOr(parser);
+            }
+            advance(parser);
+        }
+        if(
             curr(parser).category.type == TOKEN_OPERATOR
             && curr(parser).category.subType == OPERATOR_ASSIGN
         ) {
@@ -89,49 +123,46 @@ int assignment(Parser* parser) {
 }
 
 int logicOr(Parser* parser) {
-    if(logicAnd(parser) != 1) return 0;
+    if(logicAnd(parser) == 0) return 0;
     while(1) {
         if(
             curr(parser).category.type == TOKEN_KEYWORD
             && curr(parser).category.subType == KEYWORD_OR
         ) advance(parser);
         else break;
-        if(logicAnd(parser) != 1) return 0;
-    }
-    return 1;
+        if(logicAnd(parser) == 0) return 0;
+    } return 1;
 }
 
 int logicAnd(Parser* parser) {
-    if(equality(parser) != 1) return 0;
+    if(equality(parser) == 0) return 0;
     while(1) {
         if(
             curr(parser).category.type == TOKEN_KEYWORD
             && curr(parser).category.subType == KEYWORD_AND
         ) advance(parser);
         else break;
-        if(equality(parser) != 1) return 0;
-    }
-    return 1;
+        if(equality(parser) == 0) return 0;
+    } return 1;
 }
 
 int equality(Parser* parser) {
-    if(comparison(parser) != 1) return 0;
+    if(comparison(parser) == 0) return 0;
     while(1) {
         if(
             curr(parser).category.type == TOKEN_OPERATOR
             && (
                 curr(parser).category.subType == OPERATOR_EQUALS 
                 || curr(parser).category.subType == OPERATOR_NOT_EQU    
-                )
+            )
         ) advance(parser);
         else break;
-        if(comparison(parser) != 1) return 0;
-    }
-    return 1;
+        if(comparison(parser) == 0) return 0;
+    } return 1;
 }
 
 int comparison(Parser* parser) {
-    if(term(parser) != 1) return 0;
+    if(term(parser) == 0) return 0;
     while(1) {
         if(
             curr(parser).category.type == TOKEN_OPERATOR
@@ -140,44 +171,41 @@ int comparison(Parser* parser) {
                 || curr(parser).category.subType == OPERATOR_LESSER_T
                 || curr(parser).category.subType == OPERATOR_EQU_GREATER_T
                 || curr(parser).category.subType == OPERATOR_EQU_LESSER_T    
-                )
+            )
         ) advance(parser);
         else break;
-        if(term(parser) != 1) return 0;
-    }
-    return 1;
+        if(term(parser) == 0) return 0;
+    } return 1;
 }
 
 int term(Parser* parser) {
-    if(factor(parser) != 1) return 0;
+    if(factor(parser) == 0) return 0;
     while(1) {
         if(
             curr(parser).category.type == TOKEN_OPERATOR
             && (
                 curr(parser).category.subType == OPERATOR_PLUS 
                 || curr(parser).category.subType == OPERATOR_MINUS    
-                )
+            )
         ) advance(parser);
         else break;
-        if(factor(parser) != 1) return 0;
-    }
-    return 1;
+        if(factor(parser) == 0) return 0;
+    } return 1;
 }
 
 int factor(Parser* parser) {
-    if(unary(parser) != 1) return 0;
+    if(unary(parser) == 0) return 0;
     while(1) {
         if(
             curr(parser).category.type == TOKEN_OPERATOR
             && (
                 curr(parser).category.subType == OPERATOR_MULTI 
                 || curr(parser).category.subType == OPERATOR_DIVIDE    
-                )
+            )
         ) advance(parser);
         else break;
-        if(unary(parser) != 1) return 0;
-    }
-    return 1;
+        if(unary(parser) == 0) return 0;
+    } return 1;
 }
 
 int unary(Parser* parser) {
@@ -187,8 +215,7 @@ int unary(Parser* parser) {
     ) {
         advance(parser);
         return unary(parser);
-    }
-    return primary(parser);
+    } return primary(parser);
 }
 
 int primary(Parser* parser) {
@@ -211,9 +238,24 @@ int primary(Parser* parser) {
                 if(curr(parser).category.type == TOKEN_IDENTIFIER) {
                     advance(parser);
                 } 
-                else return 0;
+                else {
+                    retreat(parser);
+                    break;
+                }
             }
             else break;
+        }
+        if(
+            curr(parser).category.type == TOKEN_PUNCTUATION
+            && curr(parser).category.subType == PUNCTUATION_PARENTH_OPEN
+        ) {
+            advance(parser);
+            argList(parser);
+            if(
+                curr(parser).category.type != TOKEN_PUNCTUATION
+                || curr(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
+            ) return 0;
+            advance(parser);
         }
         if(
             curr(parser).category.type == TOKEN_PUNCTUATION
@@ -310,8 +352,7 @@ int returnSTMT(Parser* parser) {
     ) {
         advance(parser);
         return 1;
-    }
-    return 0;
+    } return 0;
 }
 
 int breakSTMT(Parser* parser) {
@@ -326,8 +367,7 @@ int breakSTMT(Parser* parser) {
     ) {
         advance(parser);
         return 1;
-    }
-    return 0;
+    } return 0;
 }
 
 int blockSTMT(Parser* parser) {
@@ -343,8 +383,7 @@ int blockSTMT(Parser* parser) {
     ) {
         advance(parser);
         return 1;
-    }
-    return 0;
+    } return 0;
 }
 
 int methodSTMT(Parser* parser) {
@@ -386,6 +425,20 @@ int paramList(Parser* parser) {
             } else break;
         }
     }
-    // whatever I get, I have to process it in methodSTMT
+    // whatever I get (epsilon or not), I have to process it in methodSTMT
+    return 1;
+}
+
+int argList(Parser* parser) {
+    if(expr(parser) == 0) return 1;  // epsilon
+    while(1) {
+        if(
+            curr(parser).category.type == TOKEN_PUNCTUATION
+            && curr(parser).category.subType == PUNCTUATION_COMMA
+        ) {
+            advance(parser);
+            if(expr(parser) == 0) return 0;
+        } else break;
+    }
     return 1;
 }

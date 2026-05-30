@@ -8,7 +8,7 @@
 // declaration-> type_spec TOKEN_IDENTIFIER OPERATOR_ASSIGN expr PUNCTUATION_SEMICOLON
 // type_spec  -> KEYWORD_NUMBER | KEYWORD_STRING | KEYWORD_BOOL
 // expr       -> assignment
-// assignment -> TOKEN_IDENTIFIER OPERATOR_ASSIGN assignment | logic_or
+// assignment -> TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* (PUNCTUATION_SQUARE_B_OPEN expr PUNCTUATION_SQUARE_B_CLOSED)? OPERATOR_ASSIGN assignment | logic_or
 // logic_or   -> logic_and (KEYWORD_OR logic_and)*
 // logic_and  -> equality (KEYWORD_AND equality)*
 // equality   -> comparison ((OPERATOR_EQUALS | OPERATOR_NOT_EQU) comparison)*
@@ -16,7 +16,7 @@
 // term       -> factor ((OPERATOR_PLUS | OPERATOR_MINUS) factor)*
 // factor     -> unary ((OPERATOR_MULTI | OPERATOR_DIVIDE) unary)*
 // unary      -> KEYWORD_NOT unary | primary
-// primary    -> TOKEN_NUMBER | TOKEN_STRING | TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* (PUNCTUATION_SQUARE_B_OPEN expr PUNCTUATION_SQUARE_B_CLOSED)? | KEYWORD_TRUE | KEYWORD_FALSE | KEYWORD_NULL | PUNCTUATION_PARENTH_OPEN expr PUNCTUATION_PARENTH_CLOSED
+// primary    -> TOKEN_NUMBER | TOKEN_STRING | TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* (PUNCTUATION_PARENTH_OPEN arg_list PUNCTUATION_PARENTH_CLOSED)? (PUNCTUATION_SQUARE_B_OPEN expr PUNCTUATION_SQUARE_B_CLOSED)? | KEYWORD_TRUE | KEYWORD_FALSE | KEYWORD_NULL | PUNCTUATION_PARENTH_OPEN expr PUNCTUATION_PARENTH_CLOSED
 // while_stmt -> KEYWORD_WHILE PUNCTUATION_PARENTH_OPEN expr PUNCTUATION_PARENTH_CLOSED stmt
 // if_stmt    -> KEYWORD_IF PUNCTUATION_PARENTH_OPEN expr PUNCTUATION_PARENTH_CLOSED stmt
 // return_stmt-> KEYWORD_RETURN expr? PUNCTUATION_SEMICOLON
@@ -24,6 +24,7 @@
 // block_stmt -> PUNCTUATION_BRACES_OPEN stmt* PUNCTUATION_BRACES_CLOSED
 // method_stmt-> KEYWORD_METHOD TOKEN_IDENTIFIER PUNCTUATION_PARENTH_OPEN param_list PUNCTUATION_PARENTH_CLOSED block_stmt
 // param_list -> TOKEN_IDENTIFIER (PUNCTUATION_COMMA TOKEN_IDENTIFIER)* | epsilon
+// arg_list   -> expr (PUNCTUATION_COMMA expr)* | epsilon
 
 int program(Parser* parser);
 int stmt(Parser* parser);
@@ -46,5 +47,6 @@ int breakSTMT(Parser* parser);
 int blockSTMT(Parser* parser);
 int methodSTMT(Parser* parser);
 int paramList(Parser* parser);
+int argList(Parser* parser);
 
 #endif

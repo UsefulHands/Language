@@ -74,3 +74,25 @@ break;
 method foo(a, b) { return a; }
 
 Success: 1
+
+*Commit 9: I added the identifier chain logic and number keyword logic such as 3, 3.5 is considered as "number" rather than "int", "double". 
+Added some of the missing grammar rules, lexer is now handling "dot" better.
+Now my parser can handle syntax like:
+
+number deepExpr = (x + y) * (z - 1.0) / (x + 1.0);
+obj.result = add(obj.a, obj.b) + obj.c.value;
+number e3 = obj.a.b.c.d;
+obj.x = obj.y + obj.z;
+obj.a.b = obj.c.d * 2.0;
+method complex(a, b) {
+    number i = 0;
+    while (i < 10) {
+        if (i == a) {
+            return i;
+        }
+        i = i + 1;
+    }
+    return b;
+}
+
+I think the system is good to go for the semantic analysis.

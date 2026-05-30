@@ -1,2 +1,9 @@
-if x = 5 + -5
+if x = 5 + -5.8 3 +2.8 4.15 1.28.4
 while for * /
+abc3.cdf.efg
+abc3.5
+3.5.cdf
+3.5.8
+.5
+abc.5.cdf
+5.

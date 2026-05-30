@@ -83,21 +83,38 @@ int isValidIdentifier(char* token) {
     if(token == NULL) return 0;
     int len = strlen(token);
     if (len == 0) return 0;
-    if(!((token[0] >= 'a' && token[0] <= 'z') || (token[0] >= 'A' && token[0] <= 'Z'))) return 0;
-    for(int i = 1; i < len; i++){
-        if(!((token[i] >= 'a' && token[i] <= 'z') || (token[i] >= 'A' && token[i] <= 'Z') || (token[i] >= '0' && token[i] <= '9'))) return 0;
-    }
-    return 1;
+    if(
+        (token[0] < 'a' || token[0] > 'z')
+        && (token[0] < 'A' || token[0] > 'Z')
+    ) return 0;
+    for(int i = 1; i < len; i++) {
+        if(
+            (token[i] < 'a' || token[i] > 'z')
+            && (token[i] < 'A' || token[i] > 'Z')
+            && (token[i] < '0' || token[i] > '9')
+        ) return 0;
+    } return 1;
 }
 
 int isValidNumber(char* token){
     if(token == NULL) return 0;
     int len = strlen(token);
     if (len == 0) return 0;
-    if(!((token[0] >= '0' && token[0] <= '9') || ( len >= 2 && (token[0] == '+' || token[0] == '-')))) return 0;
+    if(
+        (token[0] < '0' || token[0] > '9')
+        && (
+            len < 2 
+            || (token[0] != '+' && token[0] != '-')
+        )
+    ) return 0;
+    int dotSeen = 0;
     for(int i = 1; i < len; i++) {
-        if(!(token[i] >= '0' && token[i] <= '9')) return 0;
+        if(token[i] == '.') {
+            if(dotSeen > 0) return 0;
+            dotSeen = 1;
+        } else if(token[i] < '0' || token[i] > '9') return 0;
     }
+    if(token[len - 1] == '.') return 0;
     return 1;
 }
 
@@ -191,6 +208,7 @@ Token* getTokens(char* sentence, int* tokenCount) {
                 || sentence[i] == ']'  
                 || sentence[i] == ';'
                 || sentence[i] == ','
+                || (sentence[i] == '.' && (sentence[i+1] < '0' || sentence[i+1] > '9')) // I am checking the next char because the case can be like 3.5 which dot is not punctuation.
             ) {
                 currentTokenLen = 1;
                 isPunctuation = 1;
@@ -201,8 +219,9 @@ Token* getTokens(char* sentence, int* tokenCount) {
                         sentence[i] != ' ' && sentence[i] != '\0' && sentence[i] != '\n' && sentence[i] != '\r'
                         && sentence[i] != ';' && sentence[i] != ',' && sentence[i] != '(' && sentence[i] != ')'
                         && sentence[i] != '{' && sentence[i] != '}' && sentence[i] != '[' && sentence[i] != ']'
-                        && sentence[i] != '.' && sentence[i] != '=' && sentence[i] != '!' && sentence[i] != '>'
+                        && sentence[i] != '=' && sentence[i] != '!' && sentence[i] != '>'
                         && sentence[i] != '<' && sentence[i] != '*' && sentence[i] != '/'
+                        && (sentence[i] != '.' || (sentence[i+1] >= '0' && sentence[i+1] <= '9'))
                     ) {
                     currentTokenLen++;
                     i++;

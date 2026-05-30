@@ -4,10 +4,9 @@
 #include "../sourceBuffer/sourceBufferTest.h"
 #include "../parser/parserTest.h"
 
-
 void testAll() {
-    //testTokenization();
-    //testTokenLoading();
-    //testSourceRead();
+    testTokenization();
+    testTokenLoading();
+    testSourceRead();
     testParser();
 }

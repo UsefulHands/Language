@@ -1,22 +1,154 @@
-number a = 5;
-bool c5 = false;
-string s = "hello";
-number x = 1 + 2 * 3;
-number y = (4 + 5) / 3;
-bool b = true or false;
-bool b2 = true and false;
-bool b3 = not true;
-a = 10;
-a = b = 5;
-number r = a == b;
-number r2 = a != b;
-number r3 = a > b;
-number r4 = a < b;
-number r5 = a >= b;
-number r6 = a <= b;
-while (a > 0) { number x = 1; }
-if (a == true) { a = 5; }
-return 5;
-break;
-{ number x = 1; number y = 2; }
-method foo(a, b) { return a; }
+number x = 3.14;
+number y = -2.5;
+number z = +1.8;
+bool b1 = true;
+bool b2 = false;
+bool b3 = null;
+string s1 = "hello";
+string s2 = "world";
+
+x = 10;
+x = y = z = 5;
+obj.value = 3.14;
+obj.data.count = 10;
+obj.a.b.c.d = true;
+
+number r1 = x + y;
+number r2 = x - y;
+number r3 = x * y;
+number r4 = x / y;
+number r5 = x + y * z;
+number r6 = (x + y) * z;
+number r7 = x * (y + z) / 2.0;
+number r8 = -1.5 + +2.5;
+
+bool c1 = x == y;
+bool c2 = x != y;
+bool c3 = x > y;
+bool c4 = x < y;
+bool c5 = x >= y;
+bool c6 = x <= y;
+
+bool l1 = true or false;
+bool l2 = true and false;
+bool l3 = not true;
+bool l4 = not not false;
+bool l5 = true or false and true;
+bool l6 = (true or false) and true;
+bool l7 = x > 0 and y < 10;
+bool l8 = x == 1 or y == 2 or z == 3;
+
+number e1 = obj.value;
+number e2 = obj.data.count;
+number e3 = obj.a.b.c.d;
+obj.x = obj.y + obj.z;
+obj.a.b = obj.c.d * 2.0;
+
+method noParam() {
+    return 1;
+}
+
+method oneParam(a) {
+    return a;
+}
+
+method add(a, b) {
+    return a + b;
+}
+
+method nested(a, b) {
+    number result = a + b;
+    bool flag = result > 0;
+    if (flag) {
+        result = result * 2.0;
+    }
+    return result;
+}
+
+method recursive(a) {
+    if (a == 0) {
+        return 0;
+    }
+    return recursive(a);
+}
+
+noParam();
+oneParam(x);
+add(x, y);
+add(x + 1, y * 2);
+add(obj.value, obj.data.count);
+add(add(x, y), z);
+obj.foo(x, y);
+obj.a.b.bar(x);
+
+number arr1 = x[0];
+number arr2 = obj.data[5];
+number arr3 = obj.data[x + 1];
+obj.arr[0] = 10;
+
+if (x > 0) {
+    y = 1;
+}
+
+if (x > 0) {
+    y = 1;
+} 
+
+if (x > 0 and y < 10) {
+    z = x + y;
+}
+
+if (obj.value > 2.5) {
+    obj.data.count = 10;
+}
+
+while (x > 0) {
+    x = x + -1.0;
+}
+
+while (true) {
+    break;
+}
+
+while (obj.data.count > 0) {
+    obj.data.count = obj.data.count + -1.0;
+    if (obj.data.count == 5) {
+        break;
+    }
+}
+
+{
+    number x = 1;
+    number y = 2;
+    number z = x + y;
+}
+
+{
+    {
+        number inner = 1;
+    }
+    number outer = 2;
+}
+
+method complex(a, b) {
+    number i = 0;
+    while (i < 10) {
+        if (i == a) {
+            return i;
+        }
+        i = i + 1;
+    }
+    return b;
+}
+
+return x;
+return x + y;
+return obj.value;
+return add(x, y);
+return true;
+return;
+
+number chain = add(x, y) + add(y, z) * 2.0;
+bool mixedLogic = x > 0 and y < 10 or z == 5;
+number deepExpr = (x + y) * (z - 1.0) / (x + 1.0);
+obj.result = add(obj.a, obj.b) + obj.c.value;
