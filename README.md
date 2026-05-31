@@ -96,3 +96,6 @@ method complex(a, b) {
 }
 
 I think the system is good to go for the semantic analysis.
+
+*Commit 10: I created the logic of the semantic analysis. I decided to move forward with the double checking method parser -> semantic analysis -> ....
+I made the blueprint of the semantic analyze files. I will add the functions in the next couple of commits.

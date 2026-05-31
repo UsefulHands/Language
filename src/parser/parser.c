@@ -7,7 +7,6 @@ void startParser(char* charBuffer, Token* tokens) {
     parser.tokens = tokens;
     parser.index = 0;
     int success = program(&parser);
-    printf("\nCharBuffer:\n\n%s\n", charBuffer);
     printf("\nParser success: %d", success);
 }
 
