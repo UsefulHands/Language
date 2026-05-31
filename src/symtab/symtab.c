@@ -16,15 +16,6 @@ int stmtSem(SemanticChecker* checker) {
             currSem(checker).category.subType == KEYWORD_BOOL
         )
     ) return declarationSem(checker);
-    if(exprSem(checker) == 1) {
-        if(
-            currSem(checker).category.type == TOKEN_PUNCTUATION
-            && currSem(checker).category.subType == PUNCTUATION_SEMICOLON
-        ) {
-            advanceSem(checker);
-            return 1;
-        }
-    }
     if(
         currSem(checker).category.type == TOKEN_KEYWORD 
         && currSem(checker).category.subType == KEYWORD_WHILE
@@ -49,6 +40,15 @@ int stmtSem(SemanticChecker* checker) {
         currSem(checker).category.type == TOKEN_KEYWORD 
         && currSem(checker).category.subType == KEYWORD_METHOD
     ) return methodSTMTSem(checker);
+    if(exprSem(checker) == 1) {
+        if(
+            currSem(checker).category.type == TOKEN_PUNCTUATION
+            && currSem(checker).category.subType == PUNCTUATION_SEMICOLON
+        ) {
+            advanceSem(checker);
+            return 1;
+        }
+    }
     return 0;
 }
 
