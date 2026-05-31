@@ -1,3 +1,4 @@
+#include "parserTest.h"
 #include "parser.h"
 #include "../lexer/lexer.h"
 #include "../sourceBuffer/sourceBuffer.h"

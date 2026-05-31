@@ -1,1 +1,75 @@
 #include "semanticAnalyzer.h"
+#include "../symtab/symtab.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+int startSemanticAnalyzer(Token* tokens) {
+    SemanticChecker checker;
+    checker.tokens = tokens;
+    checker.index = 0;
+    checker.table = malloc(sizeof(SymbolTable));
+    checker.table->count = 0;
+    checker.table->parent = NULL;
+    int success = programSem(&checker);
+    printf("\nSemantic Analyzer success: %d", success);
+    return success;
+}
+
+SymbolTable* enterScope(SymbolTable* current) {
+    SymbolTable* newScope = malloc(sizeof(SymbolTable));
+    newScope->count = 0;
+    newScope->parent = current;
+    return newScope;
+}
+
+SymbolTable* exitScope(SymbolTable* current) {
+    SymbolTable* parent = current->parent;
+    for(int i = 0; i < current->count; i++) {
+        free(current->symbols[i].name);
+    }
+    free(current);
+    return parent;
+}
+
+Symbol* lookup(SymbolTable* table, char* name) {
+    while(table != NULL) {
+        for(int i = table->count - 1; i >= 0; i--) {
+            if(strcmp(table->symbols[i].name, name) == 0) return &table->symbols[i];          
+        } 
+        table = table->parent;  
+    } return NULL;
+}
+
+int addSymbol(SymbolTable* table, char* name, SymbolType type, TypeSpec typeSpec, int paramCount) {
+    if(table->count >= MAX_SYMBOL_COUNT) return -1;
+    for(int i = 0; i < table->count; i++) {
+        if(strcmp(table->symbols[i].name, name) == 0) return -1;
+    }
+    Symbol* s = &table->symbols[table->count++];
+    s->name = strdup(name);
+    s->type = type;
+    s->typeSpec = typeSpec;
+    s->paramCount = paramCount;
+    return 0;
+}
+
+int getCurrIndexSem(SemanticChecker* checker) {
+    return checker->index;
+}
+
+void restoreSem(SemanticChecker* checker, int saved) {
+    checker->index = saved;
+}
+
+Token advanceSem(SemanticChecker* checker) {
+    return checker->tokens[++checker->index];
+}
+
+Token retreatSem(SemanticChecker* checker) {
+    return checker->tokens[--checker->index];
+}
+
+Token currSem(SemanticChecker* checker) {
+    return checker->tokens[checker->index];
+}

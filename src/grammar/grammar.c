@@ -1,427 +1,437 @@
 #include "grammar.h"
 #include "../lexer/lexer.h"
 
-int program(Parser* parser) {
-    while(stmt(parser));
-    if(curr(parser).category.type == TOKEN_EOF) {
-        advance(parser);
+int programPar(Parser* parser) {
+    while(stmtPar(parser));
+    if(currPar(parser).category.type == TOKEN_EOF) {
+        advancePar(parser);
         return 1;
     } return 0;
 }
 
-int stmt(Parser* parser) {
-    int startIndex = getCurrIndex(parser);
-    if(declaration(parser) == 1) return 1;
-    restore(parser, startIndex);
-    if(expr(parser) == 1) {
+int stmtPar(Parser* parser) {
+    int startIndex = getCurrIndexPar(parser);
+    if(declarationPar(parser) == 1) return 1;
+    restorePar(parser, startIndex);
+    if(exprPar(parser) == 1) {
         if(
-            curr(parser).category.type == TOKEN_PUNCTUATION
-            && curr(parser).category.subType == PUNCTUATION_SEMICOLON
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_SEMICOLON
         ) {
-            advance(parser);
+            advancePar(parser);
             return 1;
         }
     }
-    restore(parser, startIndex);
-    if(whileSTMT(parser) == 1) return 1;
-    restore(parser, startIndex);
-    if(ifSTMT(parser) == 1) return 1;
-    restore(parser, startIndex);
-    if(returnSTMT(parser) == 1) return 1;
-    restore(parser, startIndex);
-    if(breakSTMT(parser) == 1) return 1;
-    restore(parser, startIndex);
-    if(blockSTMT(parser) == 1) return 1;
-    restore(parser, startIndex);
-    if(methodSTMT(parser) == 1) return 1;
+    restorePar(parser, startIndex);
+    if(whileSTMTPar(parser) == 1) return 1;
+    restorePar(parser, startIndex);
+    if(ifSTMTPar(parser) == 1) return 1;
+    restorePar(parser, startIndex);
+    if(returnSTMTPar(parser) == 1) return 1;
+    restorePar(parser, startIndex);
+    if(breakSTMTPar(parser) == 1) return 1;
+    restorePar(parser, startIndex);
+    if(blockSTMTPar(parser) == 1) return 1;
+    restorePar(parser, startIndex);
+    if(methodSTMTPar(parser) == 1) return 1;
     return 0;
 }
 
-int declaration(Parser* parser) {
-    if(typeSpec(parser) == 0) return 0;
-    if(curr(parser).category.type != TOKEN_IDENTIFIER) return 0;
-    advance(parser);
+int declarationPar(Parser* parser) {
+    if(typeSpecPar(parser) == 0) return 0;
+    if(currPar(parser).category.type != TOKEN_IDENTIFIER) return 0;
+    advancePar(parser);
+    while(1) {
+        if(
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_DOT
+        ) {
+            advancePar(parser);
+            if(currPar(parser).category.type == TOKEN_IDENTIFIER) {
+                advancePar(parser);
+            } else return 0;
+        } else break;
+    }
     if(
-        curr(parser).category.type != TOKEN_OPERATOR
-        || curr(parser).category.subType != OPERATOR_ASSIGN
+        currPar(parser).category.type != TOKEN_OPERATOR
+        || currPar(parser).category.subType != OPERATOR_ASSIGN
     ) return 0;
-    advance(parser);
-    if(expr(parser) == 0) return 0;
+    advancePar(parser);
+    if(exprPar(parser) == 0) return 0;
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_SEMICOLON
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_SEMICOLON
     ) return 0;
-    advance(parser);
+    advancePar(parser);
     return 1;
 }
 
-int typeSpec(Parser* parser) {
-    if(curr(parser).category.type != TOKEN_KEYWORD) return 0;
+int typeSpecPar(Parser* parser) {
+    if(currPar(parser).category.type != TOKEN_KEYWORD) return 0;
     if(
-        curr(parser).category.subType != KEYWORD_NUMBER
-        && curr(parser).category.subType != KEYWORD_STRING
-        && curr(parser).category.subType != KEYWORD_BOOL
+        currPar(parser).category.subType != KEYWORD_NUMBER
+        && currPar(parser).category.subType != KEYWORD_STRING
+        && currPar(parser).category.subType != KEYWORD_BOOL
     ) return 0;
-    advance(parser);
+    advancePar(parser);
     return 1;
 }
 
-int expr(Parser* parser) {
-    if(assignment(parser) == 1) return 1;
+int exprPar(Parser* parser) {
+    if(assignmentPar(parser) == 1) return 1;
     return 0;
 }
 
-int assignment(Parser* parser) {
-    int saved = getCurrIndex(parser);
-    if(curr(parser).category.type == TOKEN_IDENTIFIER) {
-        advance(parser);
+int assignmentPar(Parser* parser) {
+    int saved = getCurrIndexPar(parser);
+    if(currPar(parser).category.type == TOKEN_IDENTIFIER) {
+        advancePar(parser);
         while(1) {
             if(
-                curr(parser).category.type == TOKEN_PUNCTUATION
-                && curr(parser).category.subType == PUNCTUATION_DOT
+                currPar(parser).category.type == TOKEN_PUNCTUATION
+                && currPar(parser).category.subType == PUNCTUATION_DOT
             ) {
-                advance(parser);
-                if(curr(parser).category.type == TOKEN_IDENTIFIER) {
-                    advance(parser);
+                advancePar(parser);
+                if(currPar(parser).category.type == TOKEN_IDENTIFIER) {
+                    advancePar(parser);
                 } 
                 else {
-                    restore(parser, saved);
+                    restorePar(parser, saved);
                     return 0;
                 }
-            }
-            else break;
+            } else break;
         }
         if(
-            curr(parser).category.type == TOKEN_PUNCTUATION
-            && curr(parser).category.subType == PUNCTUATION_SQUARE_B_OPEN
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_SQUARE_B_OPEN
         ) {
-            advance(parser);
-            if(expr(parser) == 0) {
-                restore(parser, saved);
-                return logicOr(parser);
+            advancePar(parser);
+            if(exprPar(parser) == 0) {
+                restorePar(parser, saved);
+                return logicOrPar(parser);
             }
             if(
-                curr(parser).category.type != TOKEN_PUNCTUATION
-                || curr(parser).category.subType != PUNCTUATION_SQUARE_B_CLOSED
+                currPar(parser).category.type != TOKEN_PUNCTUATION
+                || currPar(parser).category.subType != PUNCTUATION_SQUARE_B_CLOSED
             ) {
-                restore(parser, saved);
-                return logicOr(parser);
+                restorePar(parser, saved);
+                return logicOrPar(parser);
             }
-            advance(parser);
+            advancePar(parser);
         }
         if(
-            curr(parser).category.type == TOKEN_OPERATOR
-            && curr(parser).category.subType == OPERATOR_ASSIGN
+            currPar(parser).category.type == TOKEN_OPERATOR
+            && currPar(parser).category.subType == OPERATOR_ASSIGN
         ) {
-            advance(parser);
-            if (assignment(parser) == 1) return 1;
+            advancePar(parser);
+            if (assignmentPar(parser) == 1) return 1;
         }
     }
-    restore(parser, saved);
-    if (logicOr(parser) == 1) return 1;
+    restorePar(parser, saved);
+    if (logicOrPar(parser) == 1) return 1;
     return 0;
 }
 
-int logicOr(Parser* parser) {
-    if(logicAnd(parser) == 0) return 0;
+int logicOrPar(Parser* parser) {
+    if(logicAndPar(parser) == 0) return 0;
     while(1) {
         if(
-            curr(parser).category.type == TOKEN_KEYWORD
-            && curr(parser).category.subType == KEYWORD_OR
-        ) advance(parser);
+            currPar(parser).category.type == TOKEN_KEYWORD
+            && currPar(parser).category.subType == KEYWORD_OR
+        ) advancePar(parser);
         else break;
-        if(logicAnd(parser) == 0) return 0;
+        if(logicAndPar(parser) == 0) return 0;
     } return 1;
 }
 
-int logicAnd(Parser* parser) {
-    if(equality(parser) == 0) return 0;
+int logicAndPar(Parser* parser) {
+    if(equalityPar(parser) == 0) return 0;
     while(1) {
         if(
-            curr(parser).category.type == TOKEN_KEYWORD
-            && curr(parser).category.subType == KEYWORD_AND
-        ) advance(parser);
+            currPar(parser).category.type == TOKEN_KEYWORD
+            && currPar(parser).category.subType == KEYWORD_AND
+        ) advancePar(parser);
         else break;
-        if(equality(parser) == 0) return 0;
+        if(equalityPar(parser) == 0) return 0;
     } return 1;
 }
 
-int equality(Parser* parser) {
-    if(comparison(parser) == 0) return 0;
+int equalityPar(Parser* parser) {
+    if(comparisonPar(parser) == 0) return 0;
     while(1) {
         if(
-            curr(parser).category.type == TOKEN_OPERATOR
+            currPar(parser).category.type == TOKEN_OPERATOR
             && (
-                curr(parser).category.subType == OPERATOR_EQUALS 
-                || curr(parser).category.subType == OPERATOR_NOT_EQU    
+                currPar(parser).category.subType == OPERATOR_EQUALS 
+                || currPar(parser).category.subType == OPERATOR_NOT_EQU    
             )
-        ) advance(parser);
+        ) advancePar(parser);
         else break;
-        if(comparison(parser) == 0) return 0;
+        if(comparisonPar(parser) == 0) return 0;
     } return 1;
 }
 
-int comparison(Parser* parser) {
-    if(term(parser) == 0) return 0;
+int comparisonPar(Parser* parser) {
+    if(termPar(parser) == 0) return 0;
     while(1) {
         if(
-            curr(parser).category.type == TOKEN_OPERATOR
+            currPar(parser).category.type == TOKEN_OPERATOR
             && (
-                curr(parser).category.subType == OPERATOR_GREATER_T 
-                || curr(parser).category.subType == OPERATOR_LESSER_T
-                || curr(parser).category.subType == OPERATOR_EQU_GREATER_T
-                || curr(parser).category.subType == OPERATOR_EQU_LESSER_T    
+                currPar(parser).category.subType == OPERATOR_GREATER_T 
+                || currPar(parser).category.subType == OPERATOR_LESSER_T
+                || currPar(parser).category.subType == OPERATOR_EQU_GREATER_T
+                || currPar(parser).category.subType == OPERATOR_EQU_LESSER_T    
             )
-        ) advance(parser);
+        ) advancePar(parser);
         else break;
-        if(term(parser) == 0) return 0;
+        if(termPar(parser) == 0) return 0;
     } return 1;
 }
 
-int term(Parser* parser) {
-    if(factor(parser) == 0) return 0;
+int termPar(Parser* parser) {
+    if(factorPar(parser) == 0) return 0;
     while(1) {
         if(
-            curr(parser).category.type == TOKEN_OPERATOR
+            currPar(parser).category.type == TOKEN_OPERATOR
             && (
-                curr(parser).category.subType == OPERATOR_PLUS 
-                || curr(parser).category.subType == OPERATOR_MINUS    
+                currPar(parser).category.subType == OPERATOR_PLUS 
+                || currPar(parser).category.subType == OPERATOR_MINUS    
             )
-        ) advance(parser);
+        ) advancePar(parser);
         else break;
-        if(factor(parser) == 0) return 0;
+        if(factorPar(parser) == 0) return 0;
     } return 1;
 }
 
-int factor(Parser* parser) {
-    if(unary(parser) == 0) return 0;
+int factorPar(Parser* parser) {
+    if(unaryPar(parser) == 0) return 0;
     while(1) {
         if(
-            curr(parser).category.type == TOKEN_OPERATOR
+            currPar(parser).category.type == TOKEN_OPERATOR
             && (
-                curr(parser).category.subType == OPERATOR_MULTI 
-                || curr(parser).category.subType == OPERATOR_DIVIDE    
+                currPar(parser).category.subType == OPERATOR_MULTI 
+                || currPar(parser).category.subType == OPERATOR_DIVIDE    
             )
-        ) advance(parser);
+        ) advancePar(parser);
         else break;
-        if(unary(parser) == 0) return 0;
+        if(unaryPar(parser) == 0) return 0;
     } return 1;
 }
 
-int unary(Parser* parser) {
+int unaryPar(Parser* parser) {
     if(
-        curr(parser).category.type == TOKEN_KEYWORD
-        && curr(parser).category.subType == KEYWORD_NOT
+        currPar(parser).category.type == TOKEN_KEYWORD
+        && currPar(parser).category.subType == KEYWORD_NOT
     ) {
-        advance(parser);
-        return unary(parser);
-    } return primary(parser);
+        advancePar(parser);
+        return unaryPar(parser);
+    } return primaryPar(parser);
 }
 
-int primary(Parser* parser) {
-    if(curr(parser).category.type == TOKEN_NUMBER) {
-        advance(parser);
+int primaryPar(Parser* parser) {
+    if(currPar(parser).category.type == TOKEN_NUMBER) {
+        advancePar(parser);
         return 1;
     }
-    if(curr(parser).category.type == TOKEN_STRING) {
-        advance(parser);
+    if(currPar(parser).category.type == TOKEN_STRING) {
+        advancePar(parser);
         return 1;
     }
-    if(curr(parser).category.type == TOKEN_IDENTIFIER) {
-        advance(parser);
+    if(currPar(parser).category.type == TOKEN_IDENTIFIER) {
+        advancePar(parser);
         while(1) {
             if(
-                curr(parser).category.type == TOKEN_PUNCTUATION
-                && curr(parser).category.subType == PUNCTUATION_DOT
+                currPar(parser).category.type == TOKEN_PUNCTUATION
+                && currPar(parser).category.subType == PUNCTUATION_DOT
             ) {
-                advance(parser);
-                if(curr(parser).category.type == TOKEN_IDENTIFIER) {
-                    advance(parser);
+                advancePar(parser);
+                if(currPar(parser).category.type == TOKEN_IDENTIFIER) {
+                    advancePar(parser);
                 } 
                 else {
-                    retreat(parser);
+                    retreatPar(parser);
                     break;
                 }
             }
             else break;
         }
         if(
-            curr(parser).category.type == TOKEN_PUNCTUATION
-            && curr(parser).category.subType == PUNCTUATION_PARENTH_OPEN
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_PARENTH_OPEN
         ) {
-            advance(parser);
-            argList(parser);
+            advancePar(parser);
+            argListPar(parser);
             if(
-                curr(parser).category.type != TOKEN_PUNCTUATION
-                || curr(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
+                currPar(parser).category.type != TOKEN_PUNCTUATION
+                || currPar(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
             ) return 0;
-            advance(parser);
+            advancePar(parser);
         }
         if(
-            curr(parser).category.type == TOKEN_PUNCTUATION
-            && curr(parser).category.subType == PUNCTUATION_SQUARE_B_OPEN
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_SQUARE_B_OPEN
         ) {
-            advance(parser);
-            if(expr(parser) == 0) return 0;
+            advancePar(parser);
+            if(exprPar(parser) == 0) return 0;
             if(
-                curr(parser).category.type == TOKEN_PUNCTUATION
-                && curr(parser).category.subType == PUNCTUATION_SQUARE_B_CLOSED
-            ) advance(parser);
+                currPar(parser).category.type == TOKEN_PUNCTUATION
+                && currPar(parser).category.subType == PUNCTUATION_SQUARE_B_CLOSED
+            ) advancePar(parser);
             else return 0;
         }
         return 1;
     }
     if(
-        curr(parser).category.type == TOKEN_KEYWORD
+        currPar(parser).category.type == TOKEN_KEYWORD
         && (
-            curr(parser).category.subType == KEYWORD_TRUE
-            || curr(parser).category.subType == KEYWORD_FALSE
-            || curr(parser).category.subType == KEYWORD_NULL
+            currPar(parser).category.subType == KEYWORD_TRUE
+            || currPar(parser).category.subType == KEYWORD_FALSE
+            || currPar(parser).category.subType == KEYWORD_NULL
         )
     ) {
-        advance(parser);
+        advancePar(parser);
         return 1;
     }
     if(
-        curr(parser).category.type == TOKEN_PUNCTUATION
-        && curr(parser).category.subType == PUNCTUATION_PARENTH_OPEN
+        currPar(parser).category.type == TOKEN_PUNCTUATION
+        && currPar(parser).category.subType == PUNCTUATION_PARENTH_OPEN
     ) {
-        advance(parser);
-        if(expr(parser) == 0) return 0;
+        advancePar(parser);
+        if(exprPar(parser) == 0) return 0;
         if(
-            curr(parser).category.type == TOKEN_PUNCTUATION
-            && curr(parser).category.subType == PUNCTUATION_PARENTH_CLOSED
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_PARENTH_CLOSED
         ) {
-            advance(parser);
+            advancePar(parser);
             return 1;
         }
     }
     return 0;
 }
 
-int whileSTMT(Parser* parser) {
+int whileSTMTPar(Parser* parser) {
     if(
-        curr(parser).category.type != TOKEN_KEYWORD
-        || curr(parser).category.subType != KEYWORD_WHILE
+        currPar(parser).category.type != TOKEN_KEYWORD
+        || currPar(parser).category.subType != KEYWORD_WHILE
     ) return 0;
-    advance(parser);
+    advancePar(parser);
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_PARENTH_OPEN
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_PARENTH_OPEN
     ) return 0;
-    advance(parser);
-    if(expr(parser) == 0) return 0;
+    advancePar(parser);
+    if(exprPar(parser) == 0) return 0;
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
     ) return 0;
-    advance(parser);
-    return stmt(parser);
+    advancePar(parser);
+    return stmtPar(parser);
 }
 
-int ifSTMT(Parser* parser) {
+int ifSTMTPar(Parser* parser) {
     if(
-        curr(parser).category.type != TOKEN_KEYWORD
-        || curr(parser).category.subType != KEYWORD_IF
+        currPar(parser).category.type != TOKEN_KEYWORD
+        || currPar(parser).category.subType != KEYWORD_IF
     ) return 0;
-    advance(parser);
+    advancePar(parser);
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_PARENTH_OPEN
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_PARENTH_OPEN
     ) return 0;
-    advance(parser);
-    if(expr(parser) == 0) return 0;
+    advancePar(parser);
+    if(exprPar(parser) == 0) return 0;
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
     ) return 0;
-    advance(parser);
-    return stmt(parser);
+    advancePar(parser);
+    return stmtPar(parser);
 }
 
-int returnSTMT(Parser* parser) {
+int returnSTMTPar(Parser* parser) {
     if(
-        curr(parser).category.type != TOKEN_KEYWORD
-        || curr(parser).category.subType != KEYWORD_RETURN
+        currPar(parser).category.type != TOKEN_KEYWORD
+        || currPar(parser).category.subType != KEYWORD_RETURN
     ) return 0;
-    advance(parser);
-    expr(parser);
+    advancePar(parser);
+    exprPar(parser);
     if(
-        curr(parser).category.type == TOKEN_PUNCTUATION
-        && curr(parser).category.subType == PUNCTUATION_SEMICOLON
+        currPar(parser).category.type == TOKEN_PUNCTUATION
+        && currPar(parser).category.subType == PUNCTUATION_SEMICOLON
     ) {
-        advance(parser);
+        advancePar(parser);
         return 1;
     } return 0;
 }
 
-int breakSTMT(Parser* parser) {
+int breakSTMTPar(Parser* parser) {
     if(
-        curr(parser).category.type != TOKEN_KEYWORD
-        || curr(parser).category.subType != KEYWORD_BREAK
+        currPar(parser).category.type != TOKEN_KEYWORD
+        || currPar(parser).category.subType != KEYWORD_BREAK
     ) return 0;
-    advance(parser);
+    advancePar(parser);
     if(
-        curr(parser).category.type == TOKEN_PUNCTUATION
-        && curr(parser).category.subType == PUNCTUATION_SEMICOLON
+        currPar(parser).category.type == TOKEN_PUNCTUATION
+        && currPar(parser).category.subType == PUNCTUATION_SEMICOLON
     ) {
-        advance(parser);
+        advancePar(parser);
         return 1;
     } return 0;
 }
 
-int blockSTMT(Parser* parser) {
+int blockSTMTPar(Parser* parser) {
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_BRACES_OPEN
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_BRACES_OPEN
     ) return 0;
-    advance(parser);
-    while(stmt(parser));
+    advancePar(parser);
+    while(stmtPar(parser));
     if(
-        curr(parser).category.type == TOKEN_PUNCTUATION
-        && curr(parser).category.subType == PUNCTUATION_BRACES_CLOSED
+        currPar(parser).category.type == TOKEN_PUNCTUATION
+        && currPar(parser).category.subType == PUNCTUATION_BRACES_CLOSED
     ) {
-        advance(parser);
+        advancePar(parser);
         return 1;
     } return 0;
 }
 
-int methodSTMT(Parser* parser) {
+int methodSTMTPar(Parser* parser) {
     if(
-        curr(parser).category.type != TOKEN_KEYWORD
-        || curr(parser).category.subType != KEYWORD_METHOD
+        currPar(parser).category.type != TOKEN_KEYWORD
+        || currPar(parser).category.subType != KEYWORD_METHOD
     ) return 0;
-    advance(parser);
-    if(curr(parser).category.type != TOKEN_IDENTIFIER) return 0;
-    advance(parser);
+    advancePar(parser);
+    if(currPar(parser).category.type != TOKEN_IDENTIFIER) return 0;
+    advancePar(parser);
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_PARENTH_OPEN
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_PARENTH_OPEN
     ) return 0;
-    advance(parser);
-    if(paramList(parser) == 0) return 0;
+    advancePar(parser);
+    if(paramListPar(parser) == 0) return 0;
     if(
-        curr(parser).category.type != TOKEN_PUNCTUATION
-        || curr(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
+        currPar(parser).category.type != TOKEN_PUNCTUATION
+        || currPar(parser).category.subType != PUNCTUATION_PARENTH_CLOSED
     ) return 0;
-    advance(parser);
-    return blockSTMT(parser);
+    advancePar(parser);
+    return blockSTMTPar(parser);
 }
 
-int paramList(Parser* parser) {
-    if(curr(parser).category.type == TOKEN_IDENTIFIER) {
-        advance(parser);
+int paramListPar(Parser* parser) {
+    if(currPar(parser).category.type == TOKEN_IDENTIFIER) {
+        advancePar(parser);
         while(1) {
             if(
-                curr(parser).category.type == TOKEN_PUNCTUATION 
-                && curr(parser).category.subType == PUNCTUATION_COMMA
+                currPar(parser).category.type == TOKEN_PUNCTUATION 
+                && currPar(parser).category.subType == PUNCTUATION_COMMA
             ) {
-                advance(parser); 
-                if(curr(parser).category.type != TOKEN_IDENTIFIER) {
-                    retreat(parser);
+                advancePar(parser); 
+                if(currPar(parser).category.type != TOKEN_IDENTIFIER) {
+                    retreatPar(parser);
                     return 0;
                 }
-                advance(parser);
+                advancePar(parser);
             } else break;
         }
     }
@@ -429,15 +439,15 @@ int paramList(Parser* parser) {
     return 1;
 }
 
-int argList(Parser* parser) {
-    if(expr(parser) == 0) return 1;  // epsilon
+int argListPar(Parser* parser) {
+    if(exprPar(parser) == 0) return 1;  // epsilon
     while(1) {
         if(
-            curr(parser).category.type == TOKEN_PUNCTUATION
-            && curr(parser).category.subType == PUNCTUATION_COMMA
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_COMMA
         ) {
-            advance(parser);
-            if(expr(parser) == 0) return 0;
+            advancePar(parser);
+            if(exprPar(parser) == 0) return 0;
         } else break;
     }
     return 1;

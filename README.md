@@ -99,3 +99,6 @@ I think the system is good to go for the semantic analysis.
 
 *Commit 10: I created the logic of the semantic analysis. I decided to move forward with the double checking method parser -> semantic analysis -> ....
 I made the blueprint of the semantic analyze files. I will add the functions in the next couple of commits.
+
+*Commit 11: I figured out that I made a mistake with the file naming so I did a quick rename operation. I solved another problem that prevents me from creating "number obj.abc = 5;" because identifier chain was not added to the declaration.
+I also implemented some of the semantic analyzer functions. I will implement more in the future commits.

@@ -2,30 +2,31 @@
 #include "../grammar/grammar.h"
 #include <stdio.h>
 
-void startParser(char* charBuffer, Token* tokens) {
+int startParser(char* charBuffer, Token* tokens) {
     Parser parser;
     parser.tokens = tokens;
     parser.index = 0;
-    int success = program(&parser);
+    int success = programPar(&parser);
     printf("\nParser success: %d", success);
+    return success;
 }
 
-int getCurrIndex(Parser* parser) {
+int getCurrIndexPar(Parser* parser) {
     return parser->index;
 }
 
-void restore(Parser* parser, int saved) {
+void restorePar(Parser* parser, int saved) {
     parser->index = saved;
 }
 
-Token advance(Parser* parser) {
+Token advancePar(Parser* parser) {
     return parser->tokens[++parser->index];
 }
 
-Token retreat(Parser* parser) {
+Token retreatPar(Parser* parser) {
     return parser->tokens[--parser->index];
 }
 
-Token curr(Parser* parser) {
+Token currPar(Parser* parser) {
     return parser->tokens[parser->index];
 }

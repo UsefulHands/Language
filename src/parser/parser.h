@@ -8,12 +8,12 @@ typedef struct Parser {
     int index;
 } Parser;
 
-void startParser(char* charBuffer, Token* tokens);
+int startParser(char* charBuffer, Token* tokens);
 
-int getCurrIndex(Parser* parser);
-void restore(Parser* parser, int saved);
-Token advance(Parser* parser);
-Token retreat(Parser* parser);
-Token curr(Parser* parser);
+int getCurrIndexPar(Parser* parser);
+void restorePar(Parser* parser, int saved);
+Token advancePar(Parser* parser);
+Token retreatPar(Parser* parser);
+Token currPar(Parser* parser);
 
 #endif

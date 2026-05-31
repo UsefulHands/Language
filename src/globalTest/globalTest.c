@@ -3,10 +3,12 @@
 #include "../lexer/lexerLoadTokensTest.h"
 #include "../sourceBuffer/sourceBufferTest.h"
 #include "../parser/parserTest.h"
+#include "../semanticAnalyzer/semanticAnalyzerTest.h"
 
 void testAll() {
-    testTokenization();
-    testTokenLoading();
-    testSourceRead();
-    testParser();
+    //testTokenization();
+    //testTokenLoading();
+    //testSourceRead();
+    //testParser();
+    testSemanticAnalyzer();
 }

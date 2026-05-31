@@ -1,8 +1,33 @@
 #ifndef SEMANTIC_ANALYZER_H
 #define SEMANTIC_ANALYZER_H
 
-#include "../symtab/symtab.h"
+#define MAX_SYMBOL_COUNT 300
+
 #include "../lexer/lexer.h"
+
+typedef enum { 
+    SYMBOL_VARIABLE, 
+    SYMBOL_METHOD 
+} SymbolType;
+
+typedef enum { 
+    TYPE_NUMBER, 
+    TYPE_STRING,
+    TYPE_BOOL
+} TypeSpec;
+
+typedef struct Symbol {
+    char* name;
+    SymbolType type;
+    TypeSpec typeSpec;
+    int paramCount;
+} Symbol;
+
+typedef struct SymbolTable {
+    Symbol symbols[MAX_SYMBOL_COUNT];
+    int count;
+    struct SymbolTable* parent;
+} SymbolTable;
 
 typedef struct {
     Token* tokens;
@@ -10,27 +35,17 @@ typedef struct {
     SymbolTable* table;
 } SemanticChecker;
 
-int semProgram(SemanticChecker* checker);
-int semStmt(SemanticChecker* checker);
-int semDeclaration(SemanticChecker* checker);
-int semTypeSpec(SemanticChecker* checker);
-int semExpr(SemanticChecker* checker);
-int semAssignment(SemanticChecker* checker);
-int semLogicOr(SemanticChecker* checker);
-int semLogicAnd(SemanticChecker* checker);
-int semEquality(SemanticChecker* checker);
-int semComparison(SemanticChecker* checker);
-int semTerm(SemanticChecker* checker);
-int semFactor(SemanticChecker* checker);
-int semUnary(SemanticChecker* checker);
-int semPrimary(SemanticChecker* checker);
-int semWhileSTMT(SemanticChecker* checker);
-int semIfSTMT(SemanticChecker* checker);
-int semReturnSTMT(SemanticChecker* checker);
-int semBreakSTMT(SemanticChecker* checker);
-int semBlockSTMT(SemanticChecker* checker);
-int semMethodSTMT(SemanticChecker* checker);
-int semParamList(SemanticChecker* checker);
-int semArgList(SemanticChecker* checker);
+int startSemanticAnalyzer(Token* tokens);
+
+SymbolTable* enterScope(SymbolTable* cur);
+SymbolTable* exitScope(SymbolTable* curr);
+Symbol* lookup(SymbolTable* table, char* name);
+int addSymbol(SymbolTable* table, char* name, SymbolType type, TypeSpec typeSpec, int paramCount);
+
+int getCurrIndexSem(SemanticChecker* checker);
+void restoreSem(SemanticChecker* checker, int saved);
+Token advanceSem(SemanticChecker* checker);
+Token retreatSem(SemanticChecker* checker);
+Token currSem(SemanticChecker* checker);
 
 #endif

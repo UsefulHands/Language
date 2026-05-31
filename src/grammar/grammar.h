@@ -5,7 +5,7 @@
 
 // program    -> stmt* TOKEN_EOF
 // stmt       -> declaration | expr PUNCTUATION_SEMICOLON | while_stmt | if_stmt | return_stmt | break_stmt | block_stmt | method_stmt
-// declaration-> type_spec TOKEN_IDENTIFIER OPERATOR_ASSIGN expr PUNCTUATION_SEMICOLON
+// declaration-> type_spec TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* OPERATOR_ASSIGN expr PUNCTUATION_SEMICOLON
 // type_spec  -> KEYWORD_NUMBER | KEYWORD_STRING | KEYWORD_BOOL
 // expr       -> assignment
 // assignment -> TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* (PUNCTUATION_SQUARE_B_OPEN expr PUNCTUATION_SQUARE_B_CLOSED)? OPERATOR_ASSIGN assignment | logic_or
@@ -26,27 +26,27 @@
 // param_list -> TOKEN_IDENTIFIER (PUNCTUATION_COMMA TOKEN_IDENTIFIER)* | epsilon
 // arg_list   -> expr (PUNCTUATION_COMMA expr)* | epsilon
 
-int program(Parser* parser);
-int stmt(Parser* parser);
-int declaration(Parser* parser);
-int typeSpec(Parser* parser);
-int expr(Parser* parser);
-int assignment(Parser* parser);
-int logicOr(Parser* parser);
-int logicAnd(Parser* parser);
-int equality(Parser* parser);
-int comparison(Parser* parser);
-int term(Parser* parser);
-int factor(Parser* parser);
-int unary(Parser* parser);
-int primary(Parser* parser);
-int whileSTMT(Parser* parser);
-int ifSTMT(Parser* parser);
-int returnSTMT(Parser* parser);
-int breakSTMT(Parser* parser);
-int blockSTMT(Parser* parser);
-int methodSTMT(Parser* parser);
-int paramList(Parser* parser);
-int argList(Parser* parser);
+int programPar(Parser* parser);
+int stmtPar(Parser* parser);
+int declarationPar(Parser* parser);
+int typeSpecPar(Parser* parser);
+int exprPar(Parser* parser);
+int assignmentPar(Parser* parser);
+int logicOrPar(Parser* parser);
+int logicAndPar(Parser* parser);
+int equalityPar(Parser* parser);
+int comparisonPar(Parser* parser);
+int termPar(Parser* parser);
+int factorPar(Parser* parser);
+int unaryPar(Parser* parser);
+int primaryPar(Parser* parser);
+int whileSTMTPar(Parser* parser);
+int ifSTMTPar(Parser* parser);
+int returnSTMTPar(Parser* parser);
+int breakSTMTPar(Parser* parser);
+int blockSTMTPar(Parser* parser);
+int methodSTMTPar(Parser* parser);
+int paramListPar(Parser* parser);
+int argListPar(Parser* parser);
 
 #endif
