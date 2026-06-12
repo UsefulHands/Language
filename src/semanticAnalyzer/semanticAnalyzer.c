@@ -4,6 +4,18 @@
 #include <stdio.h>
 #include <string.h>
 
+char* symbolTypeAsString[] = {
+    "SYMBOL_VARIABLE", 
+    "SYMBOL_METHOD"
+};
+
+char* typeSpecAsString[] = {
+    "TYPE_NUMBER", 
+    "TYPE_STRING",
+    "TYPE_BOOL",
+    "TYPE_NULL"
+};
+
 int startSemanticAnalyzer(Token* tokens) {
     SemanticChecker checker;
     checker.tokens = tokens;
@@ -12,7 +24,17 @@ int startSemanticAnalyzer(Token* tokens) {
     checker.table->count = 0;
     checker.table->parent = NULL;
     int success = programSem(&checker);
-    printf("\nSemantic Analyzer success: %d", success);
+    printf("\nSemantic Analyzer success: %d\n", success);
+    if(success == 1) {
+        int i = 0;
+        while(i < checker.table->count) {
+            printf("Name: %s, SymbolType: %s, TypeSpec: %s\n"
+                , checker.table->symbols[i].name
+                , symbolTypeAsString[checker.table->symbols[i].type]
+                , typeSpecAsString[checker.table->symbols[i].typeSpec]);
+            i++;
+        }
+    }
     return success;
 }
 

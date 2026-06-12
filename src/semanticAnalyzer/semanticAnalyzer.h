@@ -10,11 +10,16 @@ typedef enum {
     SYMBOL_METHOD 
 } SymbolType;
 
+extern char* symbolTypeAsString[];
+
 typedef enum { 
     TYPE_NUMBER, 
     TYPE_STRING,
-    TYPE_BOOL
+    TYPE_BOOL,
+    TYPE_NULL
 } TypeSpec;
+
+extern char* typeSpecAsString[];
 
 typedef struct Symbol {
     char* name;

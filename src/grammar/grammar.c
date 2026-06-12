@@ -53,6 +53,18 @@ int declarationPar(Parser* parser) {
         } else break;
     }
     if(
+        currPar(parser).category.type == TOKEN_PUNCTUATION
+        && currPar(parser).category.subType == PUNCTUATION_SQUARE_B_OPEN
+    ) {
+        advancePar(parser);
+        if(exprPar(parser) == 0) return 0;
+        if(
+            currPar(parser).category.type != TOKEN_PUNCTUATION
+            || currPar(parser).category.subType != PUNCTUATION_SQUARE_B_CLOSED
+        ) return 0;
+        advancePar(parser);
+    }
+    if(
         currPar(parser).category.type != TOKEN_OPERATOR
         || currPar(parser).category.subType != OPERATOR_ASSIGN
     ) return 0;
@@ -404,6 +416,17 @@ int methodSTMTPar(Parser* parser) {
     advancePar(parser);
     if(currPar(parser).category.type != TOKEN_IDENTIFIER) return 0;
     advancePar(parser);
+    while(1) {
+        if(
+            currPar(parser).category.type == TOKEN_PUNCTUATION
+            && currPar(parser).category.subType == PUNCTUATION_DOT
+        ) {
+            advancePar(parser);
+            if(currPar(parser).category.type == TOKEN_IDENTIFIER) {
+                advancePar(parser);
+            } else return 0;
+        } else break;
+    }
     if(
         currPar(parser).category.type != TOKEN_PUNCTUATION
         || currPar(parser).category.subType != PUNCTUATION_PARENTH_OPEN

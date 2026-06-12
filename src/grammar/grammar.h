@@ -5,7 +5,7 @@
 
 // program    -> stmt* TOKEN_EOF
 // stmt       -> declaration | expr PUNCTUATION_SEMICOLON | while_stmt | if_stmt | return_stmt | break_stmt | block_stmt | method_stmt
-// declaration-> type_spec TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* OPERATOR_ASSIGN expr PUNCTUATION_SEMICOLON
+// declaration-> type_spec TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* (PUNCTUATION_SQUARE_B_OPEN expr PUNCTUATION_SQUARE_B_CLOSED)? OPERATOR_ASSIGN expr PUNCTUATION_SEMICOLON
 // type_spec  -> KEYWORD_NUMBER | KEYWORD_STRING | KEYWORD_BOOL
 // expr       -> assignment
 // assignment -> TOKEN_IDENTIFIER (PUNCTUATION_DOT TOKEN_IDENTIFIER)* (PUNCTUATION_SQUARE_B_OPEN expr PUNCTUATION_SQUARE_B_CLOSED)? OPERATOR_ASSIGN assignment | logic_or

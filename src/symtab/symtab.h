@@ -1,22 +1,24 @@
 #ifndef SYMTAB_H
 #define SYMTAB_H
 
+#define MAX_NAME_SIZE 256
+
 #include "../semanticAnalyzer/semanticAnalyzer.h"
 
 int programSem(SemanticChecker* checker);
 int stmtSem(SemanticChecker* checker);
 int declarationSem(SemanticChecker* checker);
 TypeSpec typeSpecSem(SemanticChecker* checker);
-int exprSem(SemanticChecker* checker);
-int assignmentSem(SemanticChecker* checker);
-int logicOrSem(SemanticChecker* checker);
-int logicAndSem(SemanticChecker* checker);
-int equalitySem(SemanticChecker* checker);
-int comparisonSem(SemanticChecker* checker);
-int termSem(SemanticChecker* checker);
-int factorSem(SemanticChecker* checker);
-int unarySem(SemanticChecker* checker);
-int primarySem(SemanticChecker* checker);
+TypeSpec exprSem(SemanticChecker* checker);
+TypeSpec assignmentSem(SemanticChecker* checker);
+TypeSpec logicOrSem(SemanticChecker* checker);
+TypeSpec logicAndSem(SemanticChecker* checker);
+TypeSpec equalitySem(SemanticChecker* checker);
+TypeSpec comparisonSem(SemanticChecker* checker);
+TypeSpec termSem(SemanticChecker* checker);
+TypeSpec factorSem(SemanticChecker* checker);
+TypeSpec unarySem(SemanticChecker* checker);
+TypeSpec primarySem(SemanticChecker* checker);
 int whileSTMTSem(SemanticChecker* checker);
 int ifSTMTSem(SemanticChecker* checker);
 int returnSTMTSem(SemanticChecker* checker);

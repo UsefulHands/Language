@@ -102,3 +102,19 @@ I made the blueprint of the semantic analyze files. I will add the functions in 
 
 *Commit 11: I figured out that I made a mistake with the file naming so I did a quick rename operation. I solved another problem that prevents me from creating "number obj.abc = 5;" because identifier chain was not added to the declaration.
 I also implemented some of the semantic analyzer functions. I will implement more in the future commits.
+
+*Commit 12: I finished creating and testing all the semantic part. I added some more grammar lures and fixed some. I wanted to create the grammar as flexible as I can. 
+current output of the semantics:
+
+Semantic Analyzer success: 1
+Name: x, SymbolType: SYMBOL_VARIABLE, TypeSpec: TYPE_NUMBER
+Name: y, SymbolType: SYMBOL_VARIABLE, TypeSpec: TYPE_NUMBER
+Name: obj.b, SymbolType: SYMBOL_VARIABLE, TypeSpec: TYPE_NUMBER
+Name: obj.c.value, SymbolType: SYMBOL_VARIABLE, TypeSpec: TYPE_NUMBER
+Name: obj.result, SymbolType: SYMBOL_VARIABLE, TypeSpec: TYPE_NUMBER
+Name: a, SymbolType: SYMBOL_VARIABLE, TypeSpec: TYPE_NUMBER
+Name: oneParam, SymbolType: SYMBOL_METHOD, TypeSpec: TYPE_NUMBER
+Name: b, SymbolType: SYMBOL_VARIABLE, TypeSpec: TYPE_NUMBER
+Name: add, SymbolType: SYMBOL_METHOD, TypeSpec: TYPE_NUMBER
+Name: obj.foo, SymbolType: SYMBOL_METHOD, TypeSpec: TYPE_NUMBER
+Name: obj.a.b.bar, SymbolType: SYMBOL_METHOD, TypeSpec: TYPE_NUMBER

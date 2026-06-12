@@ -7,6 +7,21 @@ bool b3 = null;
 string s1 = "hello";
 string s2 = "world";
 
+number obj.value = 3.14;
+number obj.data.count = 10;
+bool obj.a.b.c.d = true;
+number obj.x = 0;
+number obj.y = 1;
+number obj.z = 2;
+number obj.c.d = 3;
+number obj.a.b = 0;
+number obj.data = 0;
+number obj.arr = 0;
+number obj.a = 1;
+number obj.b = 2;
+number obj.c.value = 3;
+number obj.result = 0;
+
 x = 10;
 x = y = z = 5;
 obj.value = 3.14;
@@ -40,7 +55,7 @@ bool l8 = x == 1 or y == 2 or z == 3;
 
 number e1 = obj.value;
 number e2 = obj.data.count;
-number e3 = obj.a.b.c.d;
+bool e3 = obj.a.b.c.d;
 obj.x = obj.y + obj.z;
 obj.a.b = obj.c.d * 2.0;
 
@@ -54,6 +69,14 @@ method oneParam(a) {
 
 method add(a, b) {
     return a + b;
+}
+
+method obj.foo(a, b) {
+    return a;
+}
+
+method obj.a.b.bar(a) {
+    return a;
 }
 
 method nested(a, b) {
@@ -84,15 +107,11 @@ obj.a.b.bar(x);
 number arr1 = x[0];
 number arr2 = obj.data[5];
 number arr3 = obj.data[x + 1];
-obj.arr[0] = 10;
+number obj.arr[0] = 10;
 
 if (x > 0) {
     y = 1;
 }
-
-if (x > 0) {
-    y = 1;
-} 
 
 if (x > 0 and y < 10) {
     z = x + y;
