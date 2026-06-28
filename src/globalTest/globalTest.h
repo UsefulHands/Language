@@ -1,6 +1,7 @@
 #ifndef GLOBALTEST_H
 #define GLOBALTEST_H
 
-void testAll();
+int testAll(void);
+int testSelected(int argc, char** argv);
 
 #endif

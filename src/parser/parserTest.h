@@ -1,6 +1,6 @@
 #ifndef PARSER_TEST_H
 #define PARSER_TEST_H
 
-void testParser();
+int testParser(void);
 
 #endif
