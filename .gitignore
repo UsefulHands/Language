@@ -1,0 +1,15 @@
+# Local planning notes
+/notes/
+
+# Build outputs
+/main.exe
+*.exe
+*.o
+*.obj
+*.out
+
+# Build directories
+/build/
+/bin/
+/obj/
+/out/
