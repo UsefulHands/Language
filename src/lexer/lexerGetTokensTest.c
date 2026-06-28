@@ -82,7 +82,7 @@ int testTokenization(void) {
                 success = 0;
             }
         }
-        free(tokens);
+        freeTokens(tokens, tokenCount);
     }
     return success;
 }

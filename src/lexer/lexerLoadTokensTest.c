@@ -11,14 +11,14 @@ int testTokenLoading(void) {
     int tokenCount = 0;
     Token* tokens = loadTokensFromBuffer(charBuffer, &tokenCount);
     if(tokens == NULL) {
-        free(charBuffer);
+        freeSourceBuffer(charBuffer);
         return 0;
     }
     for(int i = 0; i < tokenCount; i++) {
         printf("%s %s\n", tokenTypeAsString[tokens[i].category.type], tokens[i].value);
     }
     int success = tokenCount > 0 && tokens[tokenCount - 1].category.type == TOKEN_EOF;
-    free(tokens);
-    free(charBuffer);
+    freeTokens(tokens, tokenCount);
+    freeSourceBuffer(charBuffer);
     return success;
 }

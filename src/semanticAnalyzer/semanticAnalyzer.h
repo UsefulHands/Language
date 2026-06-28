@@ -42,8 +42,9 @@ typedef struct {
 
 int startSemanticAnalyzer(Token* tokens);
 
-SymbolTable* enterScope(SymbolTable* cur);
+SymbolTable* enterScope(SymbolTable* cur); // allocated; free with exitScope.
 SymbolTable* exitScope(SymbolTable* curr);
+void freeSymbolTable(SymbolTable* table);
 Symbol* lookup(SymbolTable* table, char* name);
 int addSymbol(SymbolTable* table, char* name, SymbolType type, TypeSpec typeSpec, int paramCount);
 

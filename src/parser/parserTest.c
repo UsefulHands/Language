@@ -10,6 +10,12 @@ int testParser(void) {
     if(charBuffer == NULL) return 0;
     int tokenCount = 0;
     Token* tokens = loadTokensFromBuffer(charBuffer, &tokenCount);
-    if(tokens == NULL) return 0;
-    return startParser(charBuffer, tokens);
+    if(tokens == NULL) {
+        freeSourceBuffer(charBuffer);
+        return 0;
+    }
+    int success = startParser(charBuffer, tokens);
+    freeTokens(tokens, tokenCount);
+    freeSourceBuffer(charBuffer);
+    return success;
 }

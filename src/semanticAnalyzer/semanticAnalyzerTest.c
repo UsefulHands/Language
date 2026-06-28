@@ -11,10 +11,16 @@ int testSemanticAnalyzer(void) {
     if(charBuffer == NULL) return 0;
     int tokenCount = 0;
     Token* tokens = loadTokensFromBuffer(charBuffer, &tokenCount);
-    if(tokens == NULL) return 0;
-    int parserResult = startParser(charBuffer, tokens); 
-    if(parserResult == 1) {
-        return startSemanticAnalyzer(tokens);
+    if(tokens == NULL) {
+        freeSourceBuffer(charBuffer);
+        return 0;
     }
-    return 0;
+    int parserResult = startParser(charBuffer, tokens); 
+    int success = 0;
+    if(parserResult == 1) {
+        success = startSemanticAnalyzer(tokens);
+    }
+    freeTokens(tokens, tokenCount);
+    freeSourceBuffer(charBuffer);
+    return success;
 }

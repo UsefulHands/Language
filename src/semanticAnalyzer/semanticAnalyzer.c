@@ -35,6 +35,9 @@ int startSemanticAnalyzer(Token* tokens) {
             i++;
         }
     }
+    while(checker.table != NULL) {
+        checker.table = exitScope(checker.table);
+    }
     return success;
 }
 
@@ -46,12 +49,18 @@ SymbolTable* enterScope(SymbolTable* current) {
 }
 
 SymbolTable* exitScope(SymbolTable* current) {
+    if(current == NULL) return NULL;
     SymbolTable* parent = current->parent;
-    for(int i = 0; i < current->count; i++) {
-        free(current->symbols[i].name);
-    }
-    free(current);
+    freeSymbolTable(current);
     return parent;
+}
+
+void freeSymbolTable(SymbolTable* table) {
+    if(table == NULL) return;
+    for(int i = 0; i < table->count; i++) {
+        free(table->symbols[i].name);
+    }
+    free(table);
 }
 
 Symbol* lookup(SymbolTable* table, char* name) {

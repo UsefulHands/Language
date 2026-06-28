@@ -69,8 +69,10 @@ typedef struct Token {
 } Token;
 
 // private
-Token* getTokens(char* sentence, int* tokenCount); // I am keeping this for testers.
+Token* getTokens(char* sentence, int* tokenCount); // allocated; free with freeTokens.
 // public
-Token* loadTokensFromBuffer(char* charBuffer, int* tokenCount);
+Token* loadTokensFromBuffer(char* charBuffer, int* tokenCount); // allocated; free with freeTokens.
+void freeTokenValue(Token* token);
+void freeTokens(Token* tokens, int tokenCount);
 
 #endif

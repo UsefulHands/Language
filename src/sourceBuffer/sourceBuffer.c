@@ -22,3 +22,7 @@ char* readSource(char* fileLoc) {
     fclose(file);
     return charBuffer;
 }
+
+void freeSourceBuffer(char* charBuffer) {
+    free(charBuffer);
+}

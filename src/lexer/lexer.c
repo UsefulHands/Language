@@ -255,3 +255,18 @@ Token* loadTokensFromBuffer(char* charBuffer, int* tokenCount) {
     Token* tokens = getTokens(charBuffer, tokenCount);
     return tokens;
 }
+
+void freeTokenValue(Token* token) {
+    if(token == NULL) return;
+    if(token->category.type == TOKEN_EOF) return;
+    free(token->value);
+    token->value = NULL;
+}
+
+void freeTokens(Token* tokens, int tokenCount) {
+    if(tokens == NULL) return;
+    for(int i = 0; i < tokenCount; i++) {
+        freeTokenValue(&tokens[i]);
+    }
+    free(tokens);
+}

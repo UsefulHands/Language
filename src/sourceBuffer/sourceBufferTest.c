@@ -18,6 +18,6 @@ int testSourceRead(void) {
         i++;
     }
     printf("[\\0] ]");
-    free(charBuffer);
+    freeSourceBuffer(charBuffer);
     return 1;
 }
